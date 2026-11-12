@@ -678,9 +678,9 @@ function showPage(page) {
       </div>
     `,
 
- shop: `
+shop: `
   <h1 class="page-title">🛍️ Loja Panda</h1>
-  <div class="empty">Carregando Loja Panda...</div>
+  <div class="empty">Preparando sua loja...</div>
 `,
 
     games: `
@@ -740,6 +740,22 @@ function showPage(page) {
     }
   }
 
+  // LOJA PANDA
+if (page === "shop") {
+  if (typeof renderShop === "function") {
+    renderShop();
+  } else {
+    document.getElementById("content").innerHTML = `
+      <h1 class="page-title">🛍️ Loja Panda</h1>
+      <div class="empty">
+        <div class="emoji">⚠️</div>
+        <h2>Não foi possível carregar a loja.</h2>
+        <p>Confira se o arquivo loja.js está na mesma pasta do index.html.</p>
+      </div>
+    `;
+  }
+}
+
   // PERFIL
   if (page === "profile") {
     document.getElementById("profileEmail")
@@ -798,6 +814,11 @@ if (savedSession) {
 <script
   src="./biblioteca.js"
   onerror="console.error('Erro: biblioteca.js não foi encontrado!')">
+</script>
+
+  <script
+  src="./loja.js"
+  onerror="console.error('Erro: loja.js não foi encontrado!')">
 </script>
 
 </body>
