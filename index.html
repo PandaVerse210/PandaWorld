@@ -1,0 +1,729 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PandaVerse 🐼</title>
+
+<style>
+:root {
+  --green: #527b59;
+  --light-green: #e4efdf;
+  --cream: #faf8ef;
+  --dark: #26372b;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: var(--cream);
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+header {
+  background: var(--green);
+  color: white;
+  padding: 17px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.logo span {
+  margin-right: 7px;
+}
+
+#authArea {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(140deg, #e7f0df, #faf8ef);
+}
+
+.auth-card {
+  background: white;
+  width: 100%;
+  max-width: 410px;
+  padding: 35px;
+  border-radius: 22px;
+  box-shadow: 0 8px 30px #26372b18;
+  text-align: center;
+}
+
+.panda {
+  font-size: 75px;
+  margin-bottom: 10px;
+}
+
+.auth-card h1 {
+  color: var(--green);
+  margin-bottom: 8px;
+}
+
+.auth-card p {
+  color: #777;
+  margin-bottom: 23px;
+  line-height: 1.5;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  border: 1px solid #d9dfd5;
+  border-radius: 10px;
+  outline-color: var(--green);
+}
+
+.main-button {
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  width: 100%;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.main-button:hover {
+  background: #3e6245;
+}
+
+.switch {
+  margin-top: 20px;
+  color: var(--green);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#authMessage {
+  color: #b33b3b;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+#app {
+  display: none;
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: white;
+  overflow-x: auto;
+  border-bottom: 1px solid #e5e8df;
+}
+
+nav button {
+  border: none;
+  padding: 11px 15px;
+  background: #f0f4ec;
+  color: var(--dark);
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+nav button.active {
+  background: var(--green);
+  color: white;
+}
+
+main {
+  max-width: 1100px;
+  padding: 25px 18px;
+  margin: auto;
+}
+
+.welcome {
+  background: var(--light-green);
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 22px;
+}
+
+.welcome h1 {
+  color: var(--green);
+  margin-bottom: 10px;
+}
+
+.welcome p {
+  line-height: 1.6;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 22px;
+  box-shadow: 0 3px 12px #26372b0c;
+}
+
+.card .emoji {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.card h3 {
+  margin-bottom: 8px;
+}
+
+.card p {
+  color: #777;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.page-title {
+  margin-bottom: 20px;
+  color: var(--green);
+}
+
+.empty {
+  background: white;
+  padding: 35px 20px;
+  border-radius: 15px;
+  text-align: center;
+  color: #777;
+  line-height: 1.7;
+}
+
+footer {
+  text-align: center;
+  color: #888;
+  font-size: 12px;
+  padding: 25px;
+}
+
+.logout {
+  background: #ffffff25;
+  color: white;
+  border: 1px solid #ffffff66;
+  padding: 9px 13px;
+  border-radius: 9px;
+}
+
+@media(max-width:500px) {
+  header {
+    padding: 15px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .auth-card {
+    padding: 25px 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN E CADASTRO -->
+
+<section id="authArea">
+  <div class="auth-card">
+
+    <div class="panda">🐼</div>
+
+    <h1>PandaVerse</h1>
+
+    <p id="authDescription">
+      Entre no seu universo de criatividade!
+    </p>
+
+    <form id="authForm">
+
+      <input
+        id="email"
+        type="email"
+        placeholder="Seu e-mail"
+        autocomplete="email"
+        required
+      >
+
+      <input
+        id="password"
+        type="password"
+        placeholder="Sua senha"
+        autocomplete="current-password"
+        minlength="8"
+        required
+      >
+
+      <button class="main-button" id="authButton">
+        Entrar
+      </button>
+
+    </form>
+
+    <div class="switch" id="switchAuth">
+      Ainda não tem conta? Criar conta
+    </div>
+
+    <div id="authMessage" role="alert"></div>
+
+  </div>
+</section>
+
+<!-- SITE -->
+
+<div id="app">
+
+  <header>
+    <div class="logo">
+      <span>🐼</span>PandaVerse
+    </div>
+
+    <button class="logout" id="logoutButton">
+      Sair
+    </button>
+  </header>
+
+  <nav id="navigation">
+
+    <button class="active" data-page="home">🏠 Início</button>
+    <button data-page="library">📚 Biblioteca</button>
+    <button data-page="create">✍️ Criar livro</button>
+    <button data-page="shop">🛍️ Loja</button>
+    <button data-page="games">🎮 Jogos</button>
+    <button data-page="ranking">🏆 Ranking</button>
+    <button data-page="news">📰 Notícias</button>
+    <button data-page="profile">👤 Perfil</button>
+
+  </nav>
+
+  <main id="content"></main>
+
+  <footer>
+    🐼 PandaVerse — Comunidade de criatividade e leitura.
+  </footer>
+
+</div>
+
+<script>
+
+// CONFIGURAÇÃO
+
+const ACCOUNTS_KEY = "pandaverse_accounts_v1";
+const SESSION_KEY = "pandaverse_session_v1";
+
+let registerMode = false;
+let currentUser = null;
+
+// ELEMENTOS
+
+const authArea = document.getElementById("authArea");
+const app = document.getElementById("app");
+const authForm = document.getElementById("authForm");
+const authButton = document.getElementById("authButton");
+const authDescription = document.getElementById("authDescription");
+const authMessage = document.getElementById("authMessage");
+const switchAuth = document.getElementById("switchAuth");
+const passwordInput = document.getElementById("password");
+
+// BANCO LOCAL
+
+function getAccounts() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(ACCOUNTS_KEY) || "{}"
+    );
+  } catch {
+    return {};
+  }
+}
+
+function saveAccounts(accounts) {
+  localStorage.setItem(
+    ACCOUNTS_KEY,
+    JSON.stringify(accounts)
+  );
+}
+
+// PROTEÇÃO DA SENHA COM PBKDF2
+
+function createSalt() {
+  return crypto.getRandomValues(new Uint8Array(16));
+}
+
+function toBase64(bytes) {
+  return btoa(
+    Array.from(bytes)
+      .map(byte => String.fromCharCode(byte))
+      .join("")
+  );
+}
+
+function fromBase64(value) {
+  return Uint8Array.from(
+    atob(value),
+    char => char.charCodeAt(0)
+  );
+}
+
+async function hashPassword(password, salt) {
+
+  const encoder = new TextEncoder();
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"]
+  );
+
+  const result = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      salt: salt,
+      iterations: 120000,
+      hash: "SHA-256"
+    },
+    key,
+    256
+  );
+
+  return toBase64(new Uint8Array(result));
+}
+
+// ALTERNAR LOGIN E CADASTRO
+
+switchAuth.addEventListener("click", () => {
+
+  registerMode = !registerMode;
+
+  authButton.textContent = registerMode
+    ? "Criar minha conta"
+    : "Entrar";
+
+  authDescription.textContent = registerMode
+    ? "Faça seu cadastro no PandaVerse!"
+    : "Entre no seu universo de criatividade!";
+
+  switchAuth.textContent = registerMode
+    ? "Já tenho uma conta. Entrar"
+    : "Ainda não tem conta? Criar conta";
+
+  passwordInput.autocomplete = registerMode
+    ? "new-password"
+    : "current-password";
+
+  authMessage.textContent = "";
+
+});
+
+// CADASTRO E LOGIN
+
+authForm.addEventListener("submit", async (event) => {
+
+  event.preventDefault();
+
+  authMessage.textContent = "";
+
+  if (!crypto.subtle) {
+    authMessage.textContent =
+      "Seu navegador não oferece suporte à proteção necessária.";
+    return;
+  }
+
+  const email = document.getElementById("email")
+    .value.trim().toLowerCase();
+
+  const password = passwordInput.value;
+
+  authButton.disabled = true;
+  authButton.textContent = "Aguarde...";
+
+  try {
+
+    const accounts = getAccounts();
+
+    if (registerMode) {
+
+      if (accounts[email]) {
+        throw new Error("Este e-mail já possui uma conta.");
+      }
+
+      if (password.length < 8) {
+        throw new Error("A senha precisa ter pelo menos 8 caracteres.");
+      }
+
+      const salt = createSalt();
+
+      const passwordHash = await hashPassword(
+        password,
+        salt
+      );
+
+      accounts[email] = {
+        email: email,
+        salt: toBase64(salt),
+        passwordHash: passwordHash,
+        coins: 0,
+        createdAt: new Date().toISOString()
+      };
+
+      saveAccounts(accounts);
+
+    } else {
+
+      const account = accounts[email];
+
+      if (!account) {
+        throw new Error("Conta não encontrada.");
+      }
+
+      const salt = fromBase64(account.salt);
+
+      const passwordHash = await hashPassword(
+        password,
+        salt
+      );
+
+      if (passwordHash !== account.passwordHash) {
+        throw new Error("Senha incorreta.");
+      }
+
+    }
+
+    sessionStorage.setItem(
+      SESSION_KEY,
+      email
+    );
+
+    passwordInput.value = "";
+
+    openApp(email);
+
+  } catch (error) {
+
+    authMessage.textContent = error.message;
+
+  } finally {
+
+    authButton.disabled = false;
+
+    authButton.textContent = registerMode
+      ? "Criar minha conta"
+      : "Entrar";
+
+  }
+
+});
+
+// ABRIR SITE
+
+function openApp(email) {
+
+  const accounts = getAccounts();
+
+  if (!accounts[email]) return;
+
+  currentUser = accounts[email];
+
+  authArea.style.display = "none";
+  app.style.display = "block";
+
+  showPage("home");
+
+}
+
+// SAIR
+
+document.getElementById("logoutButton")
+  .addEventListener("click", () => {
+
+    sessionStorage.removeItem(SESSION_KEY);
+
+    currentUser = null;
+
+    app.style.display = "none";
+    authArea.style.display = "flex";
+
+  });
+
+// NAVEGAÇÃO
+
+document.querySelectorAll("[data-page]")
+  .forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      document.querySelectorAll("[data-page]")
+        .forEach(item => item.classList.remove("active"));
+
+      button.classList.add("active");
+
+      showPage(button.dataset.page);
+
+    });
+
+  });
+
+// PÁGINAS
+
+function showPage(page) {
+
+  const content = document.getElementById("content");
+
+  const pages = {
+
+    home: `
+      <section class="welcome">
+        <h1>Bem-vindo ao PandaVerse! 🐼</h1>
+        <p>Seu espaço para ler, criar histórias e participar da comunidade escolar.</p>
+      </section>
+
+      <h2>Explore o PandaVerse</h2>
+
+      <section class="cards">
+
+        <article class="card">
+          <div class="emoji">📚</div>
+          <h3>Biblioteca</h3>
+          <p>Descubra os livros publicados pelos estudantes.</p>
+        </article>
+
+        <article class="card">
+          <div class="emoji">✍️</div>
+          <h3>Escrita</h3>
+          <p>Crie suas próprias histórias.</p>
+        </article>
+
+        <article class="card">
+          <div class="emoji">🎮</div>
+          <h3>Jogos</h3>
+          <p>Conheça os jogos compartilhados pela comunidade.</p>
+        </article>
+
+        <article class="card">
+          <div class="emoji">🏆</div>
+          <h3>Ranking</h3>
+          <p>Acompanhe as conquistas dos estudantes.</p>
+        </article>
+
+      </section>
+    `,
+
+    library: `
+      <h1 class="page-title">📚 Biblioteca</h1>
+      <div class="empty">
+        <h2>Estante vazia 🐼</h2>
+        <p>Ainda não existem livros publicados.</p>
+        <p>Os livros serão adicionados pelos próprios estudantes.</p>
+      </div>
+    `,
+
+    create: `
+      <h1 class="page-title">✍️ Criar livro</h1>
+      <div class="empty">
+        <h2>Seu próximo livro começa aqui!</h2>
+        <p>O editor de livros será desenvolvido na próxima etapa.</p>
+      </div>
+    `,
+
+    shop: `
+      <h1 class="page-title">🛍️ Loja Panda</h1>
+      <div class="empty">
+        <h2>Loja em construção</h2>
+        <p>Os acessórios e roupas dos avatares serão adicionados em breve.</p>
+      </div>
+    `,
+
+    games: `
+      <h1 class="page-title">🎮 Jogos da comunidade</h1>
+      <div class="empty">
+        <h2>Nenhum jogo cadastrado</h2>
+        <p>Os estudantes poderão compartilhar seus jogos aqui.</p>
+      </div>
+    `,
+
+    ranking: `
+      <h1 class="page-title">🏆 Ranking</h1>
+      <div class="empty">
+        <h2>Ranking ainda vazio</h2>
+        <p>As classificações aparecerão quando o sistema de atividades estiver pronto.</p>
+      </div>
+    `,
+
+    news: `
+      <h1 class="page-title">📰 Notícias</h1>
+      <div class="empty">
+        <h2>Nenhuma notícia publicada</h2>
+        <p>As notícias serão adicionadas pela administração da comunidade.</p>
+      </div>
+    `,
+
+    profile: `
+      <h1 class="page-title">👤 Meu perfil</h1>
+      <div class="card">
+        <div class="emoji">🐼</div>
+        <h2 id="profileEmail"></h2>
+        <p id="profileCoins"></p>
+        <p>Seu perfil PandaVerse.</p>
+      </div>
+    `
+
+  };
+
+  content.innerHTML = pages[page] || pages.home;
+
+  if (page === "profile") {
+
+    document.getElementById("profileEmail")
+      .textContent = currentUser.email;
+
+    document.getElementById("profileCoins")
+      .textContent = "🪙 Moedas: " + currentUser.coins;
+
+  }
+
+}
+
+// RESTAURAR SESSÃO
+
+const savedSession = sessionStorage.getItem(SESSION_KEY);
+
+if (savedSession) {
+  openApp(savedSession);
+}
+
+</script>
+
+</body>
+</html>
