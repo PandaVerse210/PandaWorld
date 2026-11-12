@@ -1,18 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PandaVerse 🐼</title>
+
+<title>PandaWorld 🐼</title>
 
 <style>
 :root {
   --green: #527b59;
+  --dark-green: #304c36;
   --light-green: #e4efdf;
   --cream: #faf8ef;
-  --dark: #26372b;
   --white: #ffffff;
+  --text: #26372b;
 }
 
 * {
@@ -24,11 +25,11 @@
 
 body {
   background: var(--cream);
-  color: var(--dark);
+  color: var(--text);
   min-height: 100vh;
 }
 
-button, input {
+button, input, textarea, select {
   font: inherit;
 }
 
@@ -39,7 +40,7 @@ button {
 header {
   background: var(--green);
   color: white;
-  padding: 17px 25px;
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -52,22 +53,22 @@ header {
 }
 
 .logo span {
-  margin-right: 7px;
+  margin-right: 8px;
 }
 
 #authArea {
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   padding: 20px;
-  background: linear-gradient(140deg, #e7f0df, #faf8ef);
+  background: linear-gradient(140deg,#e7f0df,#faf8ef);
 }
 
 .auth-card {
-  background: white;
   width: 100%;
   max-width: 410px;
+  background: white;
   padding: 35px;
   border-radius: 22px;
   box-shadow: 0 8px 30px #26372b18;
@@ -75,19 +76,19 @@ header {
 }
 
 .panda {
-  font-size: 75px;
+  font-size: 78px;
   margin-bottom: 10px;
 }
 
 .auth-card h1 {
   color: var(--green);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .auth-card p {
   color: #777;
-  margin-bottom: 23px;
   line-height: 1.5;
+  margin-bottom: 20px;
 }
 
 .auth-card input {
@@ -96,27 +97,26 @@ header {
   margin: 8px 0;
   border: 1px solid #d9dfd5;
   border-radius: 10px;
-  outline-color: var(--green);
 }
 
 .main-button {
+  width: 100%;
   background: var(--green);
   color: white;
   border: none;
-  border-radius: 10px;
   padding: 13px;
-  width: 100%;
+  border-radius: 10px;
   margin-top: 12px;
   font-weight: bold;
 }
 
 .main-button:hover {
-  background: #3e6245;
+  background: var(--dark-green);
 }
 
 .switch {
-  margin-top: 20px;
   color: var(--green);
+  margin-top: 20px;
   cursor: pointer;
   font-size: 14px;
 }
@@ -144,7 +144,7 @@ nav button {
   border: none;
   padding: 11px 15px;
   background: #f0f4ec;
-  color: var(--dark);
+  color: var(--text);
   border-radius: 10px;
   white-space: nowrap;
 }
@@ -156,67 +156,83 @@ nav button.active {
 
 main {
   max-width: 1100px;
-  padding: 25px 18px;
   margin: auto;
+  padding: 25px 18px;
+  min-height: 70vh;
 }
 
 .welcome {
   background: var(--light-green);
-  border-radius: 18px;
-  padding: 28px;
-  margin-bottom: 22px;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 25px;
 }
 
 .welcome h1 {
-  color: var(--green);
-  margin-bottom: 10px;
+  color: var(--dark-green);
+  margin-bottom: 12px;
+  font-size: 28px;
 }
 
 .welcome p {
-  line-height: 1.6;
+  line-height: 1.7;
+  color: #536655;
+}
+
+.welcome-emoji {
+  font-size: 65px;
+  margin-bottom: 10px;
+}
+
+.page-title {
+  color: var(--green);
+  margin-bottom: 20px;
 }
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
+  gap: 16px;
   margin-top: 20px;
 }
 
 .card {
   background: white;
-  border-radius: 15px;
+  border-radius: 16px;
   padding: 22px;
   box-shadow: 0 3px 12px #26372b0c;
 }
 
-.card .emoji {
-  font-size: 32px;
-  margin-bottom: 12px;
-}
-
 .card h3 {
-  margin-bottom: 8px;
+  margin-bottom: 9px;
 }
 
 .card p {
   color: #777;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-.page-title {
-  margin-bottom: 20px;
-  color: var(--green);
+.emoji {
+  font-size: 35px;
+  margin-bottom: 12px;
 }
 
 .empty {
   background: white;
   padding: 35px 20px;
-  border-radius: 15px;
+  border-radius: 16px;
   text-align: center;
   color: #777;
   line-height: 1.7;
+}
+
+.logout {
+  background: #ffffff25;
+  color: white;
+  border: 1px solid #ffffff66;
+  padding: 9px 14px;
+  border-radius: 9px;
 }
 
 footer {
@@ -226,17 +242,13 @@ footer {
   padding: 25px;
 }
 
-.logout {
-  background: #ffffff25;
-  color: white;
-  border: 1px solid #ffffff66;
-  padding: 9px 13px;
-  border-radius: 9px;
+input, textarea, select {
+  outline-color: var(--green);
 }
 
 @media(max-width:500px) {
   header {
-    padding: 15px;
+    padding: 14px;
   }
 
   .logo {
@@ -246,23 +258,32 @@ footer {
   .auth-card {
     padding: 25px 20px;
   }
+
+  .welcome {
+    padding: 22px;
+  }
+
+  .welcome h1 {
+    font-size: 23px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN E CADASTRO -->
+<!-- LOGIN -->
 
 <section id="authArea">
+
   <div class="auth-card">
 
     <div class="panda">🐼</div>
 
-    <h1>PandaVerse</h1>
+    <h1>PandaWorld</h1>
 
     <p id="authDescription">
-      Entre no seu universo de criatividade!
+      Entre no seu universo de leitura e criatividade!
     </p>
 
     <form id="authForm">
@@ -279,8 +300,8 @@ footer {
         id="password"
         type="password"
         placeholder="Sua senha"
-        autocomplete="current-password"
         minlength="8"
+        autocomplete="current-password"
         required
       >
 
@@ -294,49 +315,65 @@ footer {
       Ainda não tem conta? Criar conta
     </div>
 
-    <div id="authMessage" role="alert"></div>
+    <div id="authMessage"></div>
 
   </div>
+
 </section>
 
-<!-- SITE -->
+<!-- APLICATIVO -->
 
 <div id="app">
 
   <header>
+
     <div class="logo">
-      <span>🐼</span>PandaVerse
+      <span>🐼</span>PandaWorld
     </div>
 
     <button class="logout" id="logoutButton">
       Sair
     </button>
+
   </header>
+
+  <!-- MENU -->
 
   <nav id="navigation">
 
     <button class="active" data-page="home">🏠 Início</button>
+
     <button data-page="library">📚 Biblioteca</button>
+
     <button data-page="create">✍️ Criar livro</button>
+
     <button data-page="shop">🛍️ Loja</button>
+
     <button data-page="games">🎮 Jogos</button>
+
     <button data-page="ranking">🏆 Ranking</button>
+
     <button data-page="news">📰 Notícias</button>
+
     <button data-page="profile">👤 Perfil</button>
 
   </nav>
 
+  <!-- CONTEÚDO -->
+
   <main id="content"></main>
 
   <footer>
-    🐼 PandaVerse — Comunidade de criatividade e leitura.
+    🐼 PandaWorld — Um mundo criado por estudantes.
   </footer>
 
 </div>
 
 <script>
 
-// CONFIGURAÇÃO
+// =================================
+// CONFIGURAÇÕES
+// =================================
 
 const ACCOUNTS_KEY = "pandaverse_accounts_v1";
 const SESSION_KEY = "pandaverse_session_v1";
@@ -344,7 +381,9 @@ const SESSION_KEY = "pandaverse_session_v1";
 let registerMode = false;
 let currentUser = null;
 
+// =================================
 // ELEMENTOS
+// =================================
 
 const authArea = document.getElementById("authArea");
 const app = document.getElementById("app");
@@ -355,7 +394,9 @@ const authMessage = document.getElementById("authMessage");
 const switchAuth = document.getElementById("switchAuth");
 const passwordInput = document.getElementById("password");
 
-// BANCO LOCAL
+// =================================
+// CONTAS
+// =================================
 
 function getAccounts() {
   try {
@@ -374,7 +415,9 @@ function saveAccounts(accounts) {
   );
 }
 
-// PROTEÇÃO DA SENHA COM PBKDF2
+// =================================
+// SENHAS
+// =================================
 
 function createSalt() {
   return crypto.getRandomValues(new Uint8Array(16));
@@ -421,7 +464,9 @@ async function hashPassword(password, salt) {
   return toBase64(new Uint8Array(result));
 }
 
-// ALTERNAR LOGIN E CADASTRO
+// =================================
+// LOGIN E CADASTRO
+// =================================
 
 switchAuth.addEventListener("click", () => {
 
@@ -432,8 +477,8 @@ switchAuth.addEventListener("click", () => {
     : "Entrar";
 
   authDescription.textContent = registerMode
-    ? "Faça seu cadastro no PandaVerse!"
-    : "Entre no seu universo de criatividade!";
+    ? "Faça seu cadastro no PandaWorld!"
+    : "Entre no seu universo de leitura e criatividade!";
 
   switchAuth.textContent = registerMode
     ? "Já tenho uma conta. Entrar"
@@ -446,8 +491,6 @@ switchAuth.addEventListener("click", () => {
   authMessage.textContent = "";
 
 });
-
-// CADASTRO E LOGIN
 
 authForm.addEventListener("submit", async (event) => {
 
@@ -494,8 +537,7 @@ authForm.addEventListener("submit", async (event) => {
         email: email,
         salt: toBase64(salt),
         passwordHash: passwordHash,
-        coins: 0,
-        createdAt: new Date().toISOString()
+        coins: 0
       };
 
       saveAccounts(accounts);
@@ -508,11 +550,9 @@ authForm.addEventListener("submit", async (event) => {
         throw new Error("Conta não encontrada.");
       }
 
-      const salt = fromBase64(account.salt);
-
       const passwordHash = await hashPassword(
         password,
-        salt
+        fromBase64(account.salt)
       );
 
       if (passwordHash !== account.passwordHash) {
@@ -521,10 +561,7 @@ authForm.addEventListener("submit", async (event) => {
 
     }
 
-    sessionStorage.setItem(
-      SESSION_KEY,
-      email
-    );
+    sessionStorage.setItem(SESSION_KEY, email);
 
     passwordInput.value = "";
 
@@ -546,7 +583,9 @@ authForm.addEventListener("submit", async (event) => {
 
 });
 
+// =================================
 // ABRIR SITE
+// =================================
 
 function openApp(email) {
 
@@ -563,7 +602,9 @@ function openApp(email) {
 
 }
 
+// =================================
 // SAIR
+// =================================
 
 document.getElementById("logoutButton")
   .addEventListener("click", () => {
@@ -577,7 +618,9 @@ document.getElementById("logoutButton")
 
   });
 
+// =================================
 // NAVEGAÇÃO
+// =================================
 
 document.querySelectorAll("[data-page]")
   .forEach(button => {
@@ -595,7 +638,9 @@ document.querySelectorAll("[data-page]")
 
   });
 
+// =================================
 // PÁGINAS
+// =================================
 
 function showPage(page) {
 
@@ -604,111 +649,141 @@ function showPage(page) {
   const pages = {
 
     home: `
+
       <section class="welcome">
-        <h1>Bem-vindo ao PandaVerse! 🐼</h1>
-        <p>Seu espaço para ler, criar histórias e participar da comunidade escolar.</p>
+
+        <div class="welcome-emoji">🐼🎋</div>
+
+        <h1>Bem-vindo ao PandaWorld!</h1>
+
+        <p>
+          Um lugar onde estudantes podem criar histórias,
+          descobrir livros, compartilhar jogos e fazer
+          parte de uma comunidade cheia de criatividade.
+        </p>
+
       </section>
 
-      <h2>Explore o PandaVerse</h2>
+      <h2>Explore nosso universo!</h2>
 
       <section class="cards">
 
         <article class="card">
           <div class="emoji">📚</div>
           <h3>Biblioteca</h3>
-          <p>Descubra os livros publicados pelos estudantes.</p>
+          <p>Leia histórias escritas pelos próprios estudantes.</p>
         </article>
 
         <article class="card">
           <div class="emoji">✍️</div>
           <h3>Escrita</h3>
-          <p>Crie suas próprias histórias.</p>
+          <p>Crie seu próprio livro e compartilhe sua imaginação.</p>
+        </article>
+
+        <article class="card">
+          <div class="emoji">🛍️</div>
+          <h3>Loja Panda</h3>
+          <p>Personalize seu avatar com itens especiais.</p>
         </article>
 
         <article class="card">
           <div class="emoji">🎮</div>
           <h3>Jogos</h3>
-          <p>Conheça os jogos compartilhados pela comunidade.</p>
+          <p>Compartilhe jogos interessantes com a comunidade.</p>
         </article>
 
         <article class="card">
           <div class="emoji">🏆</div>
           <h3>Ranking</h3>
-          <p>Acompanhe as conquistas dos estudantes.</p>
+          <p>Veja as conquistas dos participantes.</p>
+        </article>
+
+        <article class="card">
+          <div class="emoji">📰</div>
+          <h3>Notícias</h3>
+          <p>Acompanhe as novidades da escola e da comunidade.</p>
         </article>
 
       </section>
+
     `,
 
     library: `
-      <h1 class="page-title">📚 Biblioteca</h1>
+      <h1 class="page-title">📚 Biblioteca Panda</h1>
       <div class="empty">
-        <h2>Estante vazia 🐼</h2>
-        <p>Ainda não existem livros publicados.</p>
-        <p>Os livros serão adicionados pelos próprios estudantes.</p>
+        Carregando biblioteca...
       </div>
     `,
 
     create: `
       <h1 class="page-title">✍️ Criar livro</h1>
       <div class="empty">
-        <h2>Seu próximo livro começa aqui!</h2>
-        <p>O editor de livros será desenvolvido na próxima etapa.</p>
+        Seu espaço de escrita está chegando!
       </div>
     `,
 
     shop: `
       <h1 class="page-title">🛍️ Loja Panda</h1>
       <div class="empty">
-        <h2>Loja em construção</h2>
-        <p>Os acessórios e roupas dos avatares serão adicionados em breve.</p>
+        <div class="emoji">🐼</div>
+        <h2>Loja em construção!</h2>
+        <p>Em breve você poderá personalizar seu avatar.</p>
       </div>
     `,
 
     games: `
-      <h1 class="page-title">🎮 Jogos da comunidade</h1>
+      <h1 class="page-title">🎮 Jogos</h1>
       <div class="empty">
-        <h2>Nenhum jogo cadastrado</h2>
-        <p>Os estudantes poderão compartilhar seus jogos aqui.</p>
+        <div class="emoji">🎮</div>
+        <h2>Jogos da comunidade</h2>
+        <p>Em breve os estudantes poderão compartilhar seus jogos.</p>
       </div>
     `,
 
     ranking: `
       <h1 class="page-title">🏆 Ranking</h1>
       <div class="empty">
-        <h2>Ranking ainda vazio</h2>
-        <p>As classificações aparecerão quando o sistema de atividades estiver pronto.</p>
+        <div class="emoji">🏆</div>
+        <h2>Ranking em construção</h2>
+        <p>As conquistas dos estudantes aparecerão aqui.</p>
       </div>
     `,
 
     news: `
       <h1 class="page-title">📰 Notícias</h1>
       <div class="empty">
-        <h2>Nenhuma notícia publicada</h2>
-        <p>As notícias serão adicionadas pela administração da comunidade.</p>
+        <div class="emoji">📰</div>
+        <h2>Notícias da comunidade</h2>
+        <p>As notícias serão publicadas pela administração.</p>
       </div>
     `,
 
     profile: `
       <h1 class="page-title">👤 Meu perfil</h1>
+
       <div class="card">
+
         <div class="emoji">🐼</div>
+
         <h2 id="profileEmail"></h2>
+
         <p id="profileCoins"></p>
-        <p>Seu perfil PandaVerse.</p>
+
       </div>
     `
 
   };
 
   content.innerHTML = pages[page] || pages.home;
-if (page === "library") {
-  renderLibrary();
-}
 
-if (page === "create") {
-  renderBookEditor();
-}
+  if (page === "library" && typeof renderLibrary === "function") {
+    renderLibrary();
+  }
+
+  if (page === "create" && typeof renderBookEditor === "function") {
+    renderBookEditor();
+  }
+
   if (page === "profile") {
 
     document.getElementById("profileEmail")
@@ -721,7 +796,9 @@ if (page === "create") {
 
 }
 
+// =================================
 // RESTAURAR SESSÃO
+// =================================
 
 const savedSession = sessionStorage.getItem(SESSION_KEY);
 
