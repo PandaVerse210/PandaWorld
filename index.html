@@ -702,7 +702,13 @@ function showPage(page) {
   };
 
   content.innerHTML = pages[page] || pages.home;
+if (page === "library") {
+  renderLibrary();
+}
 
+if (page === "create") {
+  renderBookEditor();
+}
   if (page === "profile") {
 
     document.getElementById("profileEmail")
@@ -724,6 +730,8 @@ if (savedSession) {
 }
 
 </script>
+
+<script src="biblioteca.js"></script>
 
 </body>
 </html>
