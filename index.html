@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -112,6 +113,11 @@ header {
 
 .main-button:hover {
   background: var(--dark-green);
+}
+
+.main-button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
 }
 
 .switch {
@@ -272,12 +278,8 @@ input, textarea, select {
 
 <body>
 
-<!-- LOGIN -->
-
 <section id="authArea">
-
   <div class="auth-card">
-
     <div class="panda">🐼</div>
 
     <h1>PandaWorld</h1>
@@ -287,7 +289,6 @@ input, textarea, select {
     </p>
 
     <form id="authForm">
-
       <input
         id="email"
         type="email"
@@ -308,7 +309,6 @@ input, textarea, select {
       <button class="main-button" id="authButton">
         Entrar
       </button>
-
     </form>
 
     <div class="switch" id="switchAuth">
@@ -316,17 +316,12 @@ input, textarea, select {
     </div>
 
     <div id="authMessage"></div>
-
   </div>
-
 </section>
-
-<!-- APLICATIVO -->
 
 <div id="app">
 
   <header>
-
     <div class="logo">
       <span>🐼</span>PandaWorld
     </div>
@@ -334,32 +329,18 @@ input, textarea, select {
     <button class="logout" id="logoutButton">
       Sair
     </button>
-
   </header>
 
-  <!-- MENU -->
-
   <nav id="navigation">
-
     <button class="active" data-page="home">🏠 Início</button>
-
     <button data-page="library">📚 Biblioteca</button>
-
     <button data-page="create">✍️ Criar livro</button>
-
     <button data-page="shop">🛍️ Loja</button>
-
     <button data-page="games">🎮 Jogos</button>
-
     <button data-page="ranking">🏆 Ranking</button>
-
     <button data-page="news">📰 Notícias</button>
-
     <button data-page="profile">👤 Perfil</button>
-
   </nav>
-
-  <!-- CONTEÚDO -->
 
   <main id="content"></main>
 
@@ -439,7 +420,6 @@ function fromBase64(value) {
 }
 
 async function hashPassword(password, salt) {
-
   const encoder = new TextEncoder();
 
   const key = await crypto.subtle.importKey(
@@ -469,7 +449,6 @@ async function hashPassword(password, salt) {
 // =================================
 
 switchAuth.addEventListener("click", () => {
-
   registerMode = !registerMode;
 
   authButton.textContent = registerMode
@@ -489,11 +468,9 @@ switchAuth.addEventListener("click", () => {
     : "current-password";
 
   authMessage.textContent = "";
-
 });
 
 authForm.addEventListener("submit", async (event) => {
-
   event.preventDefault();
 
   authMessage.textContent = "";
@@ -513,11 +490,9 @@ authForm.addEventListener("submit", async (event) => {
   authButton.textContent = "Aguarde...";
 
   try {
-
     const accounts = getAccounts();
 
     if (registerMode) {
-
       if (accounts[email]) {
         throw new Error("Este e-mail já possui uma conta.");
       }
@@ -543,7 +518,6 @@ authForm.addEventListener("submit", async (event) => {
       saveAccounts(accounts);
 
     } else {
-
       const account = accounts[email];
 
       if (!account) {
@@ -558,7 +532,6 @@ authForm.addEventListener("submit", async (event) => {
       if (passwordHash !== account.passwordHash) {
         throw new Error("Senha incorreta.");
       }
-
     }
 
     sessionStorage.setItem(SESSION_KEY, email);
@@ -568,19 +541,15 @@ authForm.addEventListener("submit", async (event) => {
     openApp(email);
 
   } catch (error) {
-
     authMessage.textContent = error.message;
 
   } finally {
-
     authButton.disabled = false;
 
     authButton.textContent = registerMode
       ? "Criar minha conta"
       : "Entrar";
-
   }
-
 });
 
 // =================================
@@ -588,7 +557,6 @@ authForm.addEventListener("submit", async (event) => {
 // =================================
 
 function openApp(email) {
-
   const accounts = getAccounts();
 
   if (!accounts[email]) return;
@@ -599,7 +567,6 @@ function openApp(email) {
   app.style.display = "block";
 
   showPage("home");
-
 }
 
 // =================================
@@ -615,7 +582,6 @@ document.getElementById("logoutButton")
 
     app.style.display = "none";
     authArea.style.display = "flex";
-
   });
 
 // =================================
@@ -633,9 +599,7 @@ document.querySelectorAll("[data-page]")
       button.classList.add("active");
 
       showPage(button.dataset.page);
-
     });
-
   });
 
 // =================================
@@ -649,25 +613,19 @@ function showPage(page) {
   const pages = {
 
     home: `
-
       <section class="welcome">
-
         <div class="welcome-emoji">🐼🎋</div>
-
         <h1>Bem-vindo ao PandaWorld!</h1>
-
         <p>
           Um lugar onde estudantes podem criar histórias,
           descobrir livros, compartilhar jogos e fazer
           parte de uma comunidade cheia de criatividade.
         </p>
-
       </section>
 
       <h2>Explore nosso universo!</h2>
 
       <section class="cards">
-
         <article class="card">
           <div class="emoji">📚</div>
           <h3>Biblioteca</h3>
@@ -703,9 +661,7 @@ function showPage(page) {
           <h3>Notícias</h3>
           <p>Acompanhe as novidades da escola e da comunidade.</p>
         </article>
-
       </section>
-
     `,
 
     library: `
@@ -715,12 +671,13 @@ function showPage(page) {
       </div>
     `,
 
-create: `
-  <h1 class="page-title">✍️ Criar meu livro</h1>
-  <div class="empty">
-    <h2>Preparando seu editor...</h2>
-  </div>
-`,
+    create: `
+      <h1 class="page-title">✍️ Criar meu livro</h1>
+      <div class="empty">
+        <h2>Preparando seu editor...</h2>
+      </div>
+    `,
+
     shop: `
       <h1 class="page-title">🛍️ Loja Panda</h1>
       <div class="empty">
@@ -759,40 +716,73 @@ create: `
 
     profile: `
       <h1 class="page-title">👤 Meu perfil</h1>
-
       <div class="card">
-
         <div class="emoji">🐼</div>
-
         <h2 id="profileEmail"></h2>
-
         <p id="profileCoins"></p>
-
       </div>
     `
-
   };
 
   content.innerHTML = pages[page] || pages.home;
 
-  if (page === "library" && typeof renderLibrary === "function") {
-    renderLibrary();
+  // BIBLIOTECA
+  if (page === "library") {
+    if (typeof renderLibrary === "function") {
+      renderLibrary();
+    } else {
+      showLibraryError();
+    }
   }
 
-  if (page === "create" && typeof renderBookEditor === "function") {
-    renderBookEditor();
+  // EDITOR DE LIVROS
+  if (page === "create") {
+    if (typeof renderBookEditor === "function") {
+      renderBookEditor();
+    } else {
+      showEditorError();
+    }
   }
 
+  // PERFIL
   if (page === "profile") {
-
     document.getElementById("profileEmail")
       .textContent = currentUser.email;
 
     document.getElementById("profileCoins")
       .textContent = "🪙 Moedas: " + currentUser.coins;
-
   }
+}
 
+// =================================
+// ERROS DE CARREGAMENTO
+// =================================
+
+function showEditorError() {
+  document.getElementById("content").innerHTML = `
+    <h1 class="page-title">✍️ Criar meu livro</h1>
+    <div class="empty">
+      <div class="emoji">⚠️</div>
+      <h2>Não foi possível carregar o editor.</h2>
+      <p>Confira se o arquivo biblioteca.js está na mesma pasta do index.html.</p>
+      <button class="main-button"
+        style="max-width:220px"
+        onclick="location.reload()">
+        Tentar novamente
+      </button>
+    </div>
+  `;
+}
+
+function showLibraryError() {
+  document.getElementById("content").innerHTML = `
+    <h1 class="page-title">📚 Biblioteca Panda</h1>
+    <div class="empty">
+      <div class="emoji">⚠️</div>
+      <h2>Não foi possível carregar a biblioteca.</h2>
+      <p>Confira o arquivo biblioteca.js.</p>
+    </div>
+  `;
 }
 
 // =================================
@@ -807,7 +797,12 @@ if (savedSession) {
 
 </script>
 
-<script src="./biblioteca.js"></script>
+<!-- CARREGAR A BIBLIOTECA DEPOIS DO SCRIPT PRINCIPAL -->
+
+<script
+  src="./biblioteca.js"
+  onerror="console.error('Erro: biblioteca.js não foi encontrado!')">
+</script>
 
 </body>
 </html>
