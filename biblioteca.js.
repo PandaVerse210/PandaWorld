@@ -1,0 +1,254 @@
+
+// ======================================
+// 🐼 BIBLIOTECA DE LIVROS
+// ======================================
+
+const BOOKS_KEY = "pandaverse_books_v1";
+
+function getBooks() {
+  try {
+    return JSON.parse(localStorage.getItem(BOOKS_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveBooks(books) {
+  localStorage.setItem(BOOKS_KEY, JSON.stringify(books));
+}
+
+// ESCAPAR TEXTOS PARA EVITAR HTML INDESEJADO
+
+function safeText(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+// IDENTIFICAR O ESTUDANTE
+
+function getBookAuthor() {
+  return currentUser?.email || "Estudante";
+}
+
+// BIBLIOTECA
+
+function renderLibrary() {
+  const content = document.getElementById("content");
+  const books = getBooks().filter(book => book.published);
+
+  content.innerHTML = `
+    <h1 class="page-title">📚 Biblioteca Panda</h1>
+
+    <p style="margin-bottom:20px">
+      Histórias escritas e publicadas pelos estudantes.
+    </p>
+
+    <button class="main-button"
+      style="max-width:220px;margin-bottom:22px"
+      onclick="renderBookEditor()">
+      ✍️ Criar meu livro
+    </button>
+
+    <div class="cards" id="bookList"></div>
+  `;
+
+  const list = document.getElementById("bookList");
+
+  if (books.length === 0) {
+    list.innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        <div style="font-size:55px">🐼📖</div>
+        <h2>Nossa biblioteca está esperando!</h2>
+        <p>Quando os estudantes publicarem seus livros, eles aparecerão aqui.</p>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = books.map(book => `
+    <article class="card">
+      <div class="emoji">📘</div>
+      <h3>${safeText(book.title)}</h3>
+      <p>${safeText(book.description)}</p>
+      <p style="margin-top:10px">
+        <small>Por: ${safeText(book.author)}</small>
+      </p>
+      <button class="main-button"
+        onclick="readBook('${safeText(book.id)}')">
+        Ler livro
+      </button>
+    </article>
+  `).join("");
+}
+
+// FORMULÁRIO DE CRIAÇÃO
+
+function renderBookEditor() {
+  const content = document.getElementById("content");
+
+  content.innerHTML = `
+    <h1 class="page-title">✍️ Escreva seu livro</h1>
+
+    <div class="card">
+      <form id="bookForm">
+
+        <label for="bookTitle">Título do livro</label>
+        <input id="bookTitle"
+          maxlength="80"
+          required
+          placeholder="Digite o título"
+          style="width:100%;padding:13px;margin:10px 0;border:1px solid #ddd;border-radius:9px">
+
+        <label for="bookDescription">Descrição</label>
+        <textarea id="bookDescription"
+          maxlength="500"
+          required
+          placeholder="Conte um pouco sobre seu livro..."
+          style="width:100%;height:100px;padding:13px;margin:10px 0;border:1px solid #ddd;border-radius:9px"></textarea>
+
+        <label for="bookGenre">Gênero</label>
+        <select id="bookGenre"
+          style="width:100%;padding:13px;margin:10px 0;border:1px solid #ddd;border-radius:9px">
+          <option>Fantasia</option>
+          <option>Aventura</option>
+          <option>Comédia</option>
+          <option>Romance</option>
+          <option>Mistério</option>
+          <option>Ficção científica</option>
+          <option>Outro</option>
+        </select>
+
+        <label for="bookChapter">Primeiro capítulo</label>
+        <textarea id="bookChapter"
+          required
+          maxlength="15000"
+          placeholder="Escreva aqui sua própria história..."
+          style="width:100%;height:250px;padding:13px;margin:10px 0;border:1px solid #ddd;border-radius:9px"></textarea>
+
+        <p style="color:#777;font-size:13px;margin:8px 0">
+          Seu texto será publicado com o nome da sua conta.
+        </p>
+
+        <button class="main-button" type="submit">
+          📖 Publicar meu livro
+        </button>
+
+        <button class="main-button"
+          type="button"
+          style="background:#888"
+          onclick="renderLibrary()">
+          Voltar
+        </button>
+
+        <p id="bookMessage"
+          style="margin-top:12px;color:#b33b3b"></p>
+
+      </form>
+    </div>
+  `;
+
+  document.getElementById("bookForm")
+    .addEventListener("submit", publishBook);
+}
+
+// PUBLICAR LIVRO
+
+function publishBook(event) {
+  event.preventDefault();
+
+  const title = document.getElementById("bookTitle")
+    .value.trim();
+
+  const description = document.getElementById("bookDescription")
+    .value.trim();
+
+  const genre = document.getElementById("bookGenre").value;
+
+  const chapter = document.getElementById("bookChapter")
+    .value.trim();
+
+  if (!title || !description || !chapter) {
+    document.getElementById("bookMessage").textContent =
+      "Preencha todos os campos.";
+    return;
+  }
+
+  const books = getBooks();
+
+  const newBook = {
+    id: crypto.randomUUID(),
+    title,
+    description,
+    genre,
+    author: getBookAuthor(),
+    chapters: [
+      {
+        title: "Capítulo 1",
+        text: chapter
+      }
+    ],
+    published: true,
+    createdAt: new Date().toISOString()
+  };
+
+  books.push(newBook);
+  saveBooks(books);
+
+  renderLibrary();
+}
+
+// LER LIVRO
+
+function readBook(id) {
+  const book = getBooks().find(item => item.id === id);
+
+  if (!book) return;
+
+  const content = document.getElementById("content");
+
+  content.innerHTML = `
+    <button class="main-button"
+      style="max-width:180px;margin-bottom:20px"
+      onclick="renderLibrary()">
+      ← Voltar à biblioteca
+    </button>
+
+    <article class="card">
+      <div style="font-size:45px">📖</div>
+
+      <h1 class="page-title">
+        ${safeText(book.title)}
+      </h1>
+
+      <p>${safeText(book.description)}</p>
+
+      <p style="margin-top:10px;color:#777">
+        Autor: ${safeText(book.author)}
+      </p>
+
+      <p style="margin:10px 0;color:#527b59">
+        Gênero: ${safeText(book.genre)}
+      </p>
+
+      <hr style="margin:20px 0;border:0;border-top:1px solid #ddd">
+
+      ${book.chapters.map(chapter => `
+        <section style="margin-bottom:25px">
+          <h2 style="margin-bottom:15px">
+            ${safeText(chapter.title)}
+          </h2>
+
+          <p style="white-space:pre-wrap;line-height:1.9">
+            ${safeText(chapter.text)}
+          </p>
+        </section>
+      `).join("")}
+
+    </article>
+  `;
+}
