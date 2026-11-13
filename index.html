@@ -512,7 +512,7 @@ authForm.addEventListener("submit", async (event) => {
         email: email,
         salt: toBase64(salt),
         passwordHash: passwordHash,
-        coins: 0
+        coins: 100
       };
 
       saveAccounts(accounts);
