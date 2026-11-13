@@ -683,14 +683,10 @@ shop: `
   <div class="empty">Preparando sua loja...</div>
 `,
 
-    games: `
-      <h1 class="page-title">🎮 Jogos</h1>
-      <div class="empty">
-        <div class="emoji">🎮</div>
-        <h2>Jogos da comunidade</h2>
-        <p>Em breve os estudantes poderão compartilhar seus jogos.</p>
-      </div>
-    `,
+  games: `
+  <h1 class="page-title">🎮 PandaGames</h1>
+  <div id="gamesArea"></div>
+`,
 
     ranking: `
       <h1 class="page-title">🏆 Ranking</h1>
@@ -751,6 +747,21 @@ if (page === "shop") {
         <div class="emoji">⚠️</div>
         <h2>Não foi possível carregar a loja.</h2>
         <p>Confira se o arquivo loja.js está na mesma pasta do index.html.</p>
+      </div>
+    `;
+  }
+}
+
+  // JOGOS PANDA
+if (page === "games") {
+  if (typeof renderGames === "function") {
+    renderGames();
+  } else {
+    document.getElementById("content").innerHTML = `
+      <h1 class="page-title">🎮 PandaGames</h1>
+      <div class="empty">
+        Não foi possível carregar os jogos.
+        Confira o arquivo jogos.js.
       </div>
     `;
   }
@@ -819,6 +830,11 @@ if (savedSession) {
   <script
   src="./loja.js"
   onerror="console.error('Erro: loja.js não foi encontrado!')">
+</script>
+ 
+  <script
+  src="./jogos.js"
+  onerror="console.error('Erro: jogos.js não foi encontrado!')">
 </script>
 
 </body>
