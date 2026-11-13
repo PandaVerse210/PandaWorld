@@ -1,15 +1,13 @@
-
 /* =====================================
    PANDAWORLD - PANDAGAMES
    Comunidade de jogos
 ===================================== */
 
-// =====================================
 // CONFIGURAÇÃO DO SUPABASE
-// =====================================
 
-const SUPABASE_URL = bce2a449-7218-40a9-82c7-ec60b531ccd8
-const SUPABASE_KEY = sb_publishable_skIJsHnnl-rwmHtK91KL_A_yg_8Bchx
+const SUPABASE_URL = "https://vdlrtaetrvvrroivmvok.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_skIJsHnnl-rwmHtK91KL_A_yg_8Bchx";
 
 const pandaSupabase = window.supabase.createClient(
   SUPABASE_URL,
