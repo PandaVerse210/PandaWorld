@@ -820,22 +820,18 @@ if (savedSession) {
 
 </script>
 
-<!-- CARREGAR A BIBLIOTECA DEPOIS DO SCRIPT PRINCIPAL -->
 
-<script
-  src="./biblioteca.js"
-  onerror="console.error('Erro: biblioteca.js não foi encontrado!')">
-</script>
+<!-- BIBLIOTECA -->
+<script src="./biblioteca.js"></script>
 
-  <script
-  src="./loja.js"
-  onerror="console.error('Erro: loja.js não foi encontrado!')">
-</script>
- 
-  <script
-  src="./jogos.js"
-  onerror="console.error('Erro: jogos.js não foi encontrado!')">
-</script>
+<!-- LOJA -->
+<script src="./loja.js"></script>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- JOGOS -->
+<script src="./jogos.js"></script>
 
 </body>
 </html>
