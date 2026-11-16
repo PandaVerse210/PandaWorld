@@ -315,23 +315,25 @@ async function publishBook(event) {
 
   try {
 
-    const { error } = await getPandaDatabase()
-      .from("books")
-      .insert({
-        title: title,
-        description: description,
-        genre: genre,
-        author: getBookAuthor(),
+const { error } = await getPandaDatabase()
+  .from("books")
+  .insert({
+    user_id: currentUser.id,
+    title: title,
+    description: description,
+    genre: genre,
+    author: getBookAuthor(),
 
-        chapters: [
-          {
-            title: "Capítulo 1",
-            text: chapter
-          }
-        ],
+    chapters: [
+      {
+        title: "Capítulo 1",
+        text: chapter
+      }
+    ],
 
-        status: "pending"
-      });
+    status: "pending"
+  });
+
 
     if (error) throw error;
 
