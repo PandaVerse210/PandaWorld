@@ -341,16 +341,16 @@ const { error } = await getPandaDatabase()
       "🎉 Seu livro foi enviado! Ele aparecerá na biblioteca depois da aprovação."
     );
 
-  } catch (error) {
 
-    console.error("Erro ao publicar livro:", error);
+} catch (error) {
 
-    document.getElementById("bookMessage").textContent =
-      "Não foi possível publicar. Confira a conexão e tente novamente.";
+  console.error("Erro ao publicar livro:", error);
 
-    button.disabled = false;
-    button.textContent = "📖 Enviar meu livro";
-  }
+  document.getElementById("bookMessage").textContent =
+    "Erro: " + (error.message || "Erro desconhecido");
+
+  button.disabled = false;
+  button.textContent = "📖 Enviar meu livro";
 }
 
 // =====================================
