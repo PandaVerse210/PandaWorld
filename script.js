@@ -1,19 +1,8 @@
-<script>
+
 let registerMode = false;
 let currentUser = null;
 
-// =================================
-// CONFIGURAÇÕES
-// =================================
-
-  const ACCOUNTS_KEY = "pandaverse_accounts_v1";
-  
-// ==========================================
-// 🐼 PANDAWORLD - SISTEMA PRINCIPAL
-// SUPABASE AUTH + NAVEGAÇÃO
-// ==========================================
-
-
+const ACCOUNTS_KEY = "pandaverse_accounts_v1";
 
 // ==========================================
 // ELEMENTOS
@@ -29,32 +18,32 @@ const switchAuth = document.getElementById("switchAuth");
 const passwordInput = document.getElementById("password");
 
 // ==========================================
-// DADOS LOCAIS DA LOJA
-// Mantidos temporariamente para compatibilidade
-// com loja.js e com os dados antigos.
-// Não são usados para autenticação.
+// VERIFICAR CONEXÃO
+// ==========================================
+
+if (!window.pandaSupabase && typeof pandaSupabase === "undefined") {
+  throw new Error("Supabase não foi conectado. Confira supabase.js.");
+}
+
+// ==========================================
+// DADOS LOCAIS DO JOGADOR
 // ==========================================
 
 function getAccounts() {
   try {
-    return JSON.parse(
-      localStorage.getItem(ACCOUNTS_KEY) || "{}"
-    );
+    return JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || "{}");
   } catch {
     return {};
   }
 }
 
 function saveAccounts(accounts) {
-  localStorage.setItem(
-    ACCOUNTS_KEY,
-    JSON.stringify(accounts)
-  );
+  localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
 }
 
 function getLocalPlayer(user) {
   const accounts = getAccounts();
-  const email = user.email.toLowerCase();
+  const email = (user.email || "").toLowerCase();
 
   const oldData = accounts[email] || {};
 
@@ -62,12 +51,8 @@ function getLocalPlayer(user) {
     ...oldData,
     id: user.id,
     email: user.email,
-    coins: typeof oldData.coins === "number"
-      ? oldData.coins
-      : 100,
-    inventory: Array.isArray(oldData.inventory)
-      ? oldData.inventory
-      : [],
+    coins: typeof oldData.coins === "number" ? oldData.coins : 100,
+    inventory: Array.isArray(oldData.inventory) ? oldData.inventory : [],
     equipped: oldData.equipped || {}
   };
 
@@ -78,7 +63,7 @@ function getLocalPlayer(user) {
 }
 
 // ==========================================
-// MENSAGENS DE AUTENTICAÇÃO
+// MENSAGENS
 // ==========================================
 
 function setAuthMessage(message, success = false) {
@@ -91,7 +76,6 @@ function setAuthMessage(message, success = false) {
 // ==========================================
 
 switchAuth.addEventListener("click", () => {
-
   registerMode = !registerMode;
 
   authButton.textContent = registerMode
@@ -111,16 +95,14 @@ switchAuth.addEventListener("click", () => {
     : "current-password";
 
   passwordInput.value = "";
-
   setAuthMessage("");
 });
 
 // ==========================================
-// CADASTRO E LOGIN SUPABASE
+// CADASTRO E LOGIN
 // ==========================================
 
 authForm.addEventListener("submit", async (event) => {
-
   event.preventDefault();
 
   setAuthMessage("");
@@ -139,14 +121,13 @@ authForm.addEventListener("submit", async (event) => {
   authButton.textContent = "Aguarde...";
 
   try {
-
     if (registerMode) {
-
-      // CADASTRAR CONTA
-
       const { data, error } = await pandaSupabase.auth.signUp({
-        email: email,
-        password: password
+        email,
+        password,
+        options: {
+          emailRedirectTo: window.location.origin
+        }
       });
 
       if (error) throw error;
@@ -154,38 +135,28 @@ authForm.addEventListener("submit", async (event) => {
       passwordInput.value = "";
 
       if (data.session && data.user) {
-
         openApp(data.user);
-
       } else {
-
         setAuthMessage(
-          "Cadastro realizado! Confira seu e-mail para confirmar sua conta antes de entrar.",
+          "Cadastro realizado! Confira seu e-mail e confirme sua conta antes de entrar.",
           true
         );
-
       }
 
     } else {
-
-      // FAZER LOGIN
-
       const { data, error } =
         await pandaSupabase.auth.signInWithPassword({
-          email: email,
-          password: password
+          email,
+          password
         });
 
       if (error) throw error;
 
       passwordInput.value = "";
-
       openApp(data.user);
-
     }
 
   } catch (error) {
-
     console.error("Erro de autenticação:", error);
 
     setAuthMessage(
@@ -193,23 +164,18 @@ authForm.addEventListener("submit", async (event) => {
     );
 
   } finally {
-
     authButton.disabled = false;
-
     authButton.textContent = registerMode
       ? "Criar minha conta"
       : "Entrar";
-
   }
-
 });
 
 // ==========================================
-// ABRIR PANDAWORLD
+// ABRIR APLICATIVO
 // ==========================================
 
 function openApp(user) {
-
   if (!user) return;
 
   currentUser = getLocalPlayer(user);
@@ -218,28 +184,24 @@ function openApp(user) {
   app.style.display = "block";
 
   showPage("home");
-
 }
 
 // ==========================================
-// SAIR DA CONTA
+// SAIR
 // ==========================================
 
 document.getElementById("logoutButton")
   .addEventListener("click", async () => {
 
     const button = document.getElementById("logoutButton");
-
     button.disabled = true;
 
     try {
-
       const { error } = await pandaSupabase.auth.signOut();
 
       if (error) throw error;
 
       currentUser = null;
-
       app.style.display = "none";
       authArea.style.display = "flex";
 
@@ -247,54 +209,41 @@ document.getElementById("logoutButton")
       setAuthMessage("");
 
     } catch (error) {
-
       console.error("Erro ao sair:", error);
       alert("Não foi possível sair da conta. Tente novamente.");
 
     } finally {
-
       button.disabled = false;
-
     }
-
   });
 
 // ==========================================
 // NAVEGAÇÃO
 // ==========================================
 
-document.querySelectorAll("[data-page]")
-  .forEach(button => {
+document.querySelectorAll("[data-page]").forEach(button => {
+  button.addEventListener("click", () => {
 
-    button.addEventListener("click", () => {
+    document.querySelectorAll("[data-page]")
+      .forEach(item => item.classList.remove("active"));
 
-      document.querySelectorAll("[data-page]")
-        .forEach(item => item.classList.remove("active"));
-
-      button.classList.add("active");
-
-      showPage(button.dataset.page);
-
-    });
-
+    button.classList.add("active");
+    showPage(button.dataset.page);
   });
+});
 
 // ==========================================
-// PÁGINAS DO PANDAWORLD
+// PÁGINAS
 // ==========================================
 
 function showPage(page) {
-
   const content = document.getElementById("content");
 
   const pages = {
-
     home: `
       <section class="welcome">
         <div class="welcome-emoji">🐼🎋</div>
-
         <h1>Bem-vindo ao PandaWorld!</h1>
-
         <p>
           Um lugar onde estudantes podem criar histórias,
           descobrir livros, compartilhar jogos e fazer
@@ -305,7 +254,6 @@ function showPage(page) {
       <h2>Explore nosso universo!</h2>
 
       <section class="cards">
-
         <article class="card">
           <div class="emoji">📚</div>
           <h3>Biblioteca</h3>
@@ -341,7 +289,6 @@ function showPage(page) {
           <h3>Notícias</h3>
           <p>Acompanhe as novidades da escola e da comunidade.</p>
         </article>
-
       </section>
     `,
 
@@ -391,179 +338,132 @@ function showPage(page) {
         <p id="profileCoins"></p>
       </div>
     `
-
   };
 
   content.innerHTML = pages[page] || pages.home;
 
-  // BIBLIOTECA
-
   if (page === "library") {
-
     if (typeof renderLibrary === "function") {
       renderLibrary();
     } else {
       showLibraryError();
     }
-
   }
 
-  // EDITOR
-
   if (page === "create") {
-
     if (typeof renderBookEditor === "function") {
       renderBookEditor();
     } else {
       showEditorError();
     }
-
   }
 
-  // LOJA
-
   if (page === "shop") {
-
     if (typeof renderShop === "function") {
       renderShop();
     } else {
       content.innerHTML = `
         <h1 class="page-title">🛍️ Loja Panda</h1>
-        <div class="empty">
-          <div class="emoji">⚠️</div>
-          <h2>Não foi possível carregar a loja.</h2>
-          <p>Confira o arquivo loja.js.</p>
-        </div>
+        <div class="empty">Não foi possível carregar loja.js.</div>
       `;
     }
-
   }
 
-  // JOGOS
-
   if (page === "games") {
-
     if (typeof renderGames === "function") {
       renderGames();
     } else {
       content.innerHTML = `
         <h1 class="page-title">🎮 PandaGames</h1>
-        <div class="empty">
-          Não foi possível carregar os jogos.
-          Confira o arquivo jogos.js.
-        </div>
+        <div class="empty">Não foi possível carregar jogos.js.</div>
       `;
     }
-
   }
-
-  // PERFIL
 
   if (page === "profile" && currentUser) {
+    document.getElementById("profileEmail").textContent =
+      currentUser.email;
 
-    document.getElementById("profileEmail")
-      .textContent = currentUser.email;
-
-    document.getElementById("profileCoins")
-      .textContent = "🪙 Moedas: " + currentUser.coins;
-
+    document.getElementById("profileCoins").textContent =
+      "🪙 Moedas: " + currentUser.coins;
   }
-
 }
 
 // ==========================================
-// ERROS DE CARREGAMENTO
+// ERROS DOS MÓDULOS
 // ==========================================
 
 function showEditorError() {
-
   document.getElementById("content").innerHTML = `
     <h1 class="page-title">✍️ Criar meu livro</h1>
     <div class="empty">
       <div class="emoji">⚠️</div>
       <h2>Não foi possível carregar o editor.</h2>
-      <p>Confira se biblioteca.js está na mesma pasta.</p>
+      <p>Confira o arquivo biblioteca.js.</p>
     </div>
   `;
-
 }
 
 function showLibraryError() {
-
   document.getElementById("content").innerHTML = `
     <h1 class="page-title">📚 Biblioteca Panda</h1>
     <div class="empty">
       <div class="emoji">⚠️</div>
       <h2>Não foi possível carregar a biblioteca.</h2>
-      <p>Confira o arquivo biblioteca.js.</p>
+      <p>Confira biblioteca.js.</p>
     </div>
   `;
-
 }
 
 // ==========================================
-// RESTAURAR SESSÃO SUPABASE
+// RESTAURAR SESSÃO
 // ==========================================
 
 async function restoreSession() {
-
   try {
-
     const { data, error } =
       await pandaSupabase.auth.getSession();
 
     if (error) throw error;
 
-    if (data.session && data.session.user) {
-
+    if (data.session?.user) {
       openApp(data.session.user);
-
     } else {
-
       currentUser = null;
-
       app.style.display = "none";
       authArea.style.display = "flex";
-
     }
 
   } catch (error) {
-
     console.error("Erro ao restaurar sessão:", error);
 
     setAuthMessage(
       "Não foi possível verificar sua sessão. Atualize a página."
     );
-
   }
-
 }
 
 // ==========================================
-// OBSERVAR ALTERAÇÕES DE AUTENTICAÇÃO
+// OBSERVAR AUTENTICAÇÃO
 // ==========================================
 
 pandaSupabase.auth.onAuthStateChange((event, session) => {
 
   if (event === "SIGNED_IN" && session?.user) {
-
     if (currentUser?.id !== session.user.id) {
       openApp(session.user);
     }
-
   }
 
   if (event === "SIGNED_OUT") {
-
     currentUser = null;
-
     app.style.display = "none";
     authArea.style.display = "flex";
-
   }
-
 });
 
+// ==========================================
 // INICIAR
+// ==========================================
 
 restoreSession();
