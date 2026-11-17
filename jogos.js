@@ -3,16 +3,8 @@
    Comunidade de jogos
 ===================================== */
 
-// CONFIGURAÇÃO DO SUPABASE
-
-const SUPABASE_URL = "https://vdlrtaetrvvrroivmvok.supabase.co";
-
-const SUPABASE_KEY = "sb_publishable_skIJsHnnl-rwmHtK91KL_A_yg_8Bchx";
-
-const pandaSupabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+// Usa a conexão já criada no supabase.js
+// Não criar outra conexão aqui.
 
 // =====================================
 // ESTILOS
